@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { Button, Container, Col, Modal, Row, Spinner, Form, Accordion, Tooltip } from 'react-bootstrap';
 import { Link } from "react-router-dom";
 import ProjectTab from '../Components/ProjectTab';
-import { Plus, PlusCircle, PlusSquare } from 'react-bootstrap-icons';
+import { Plus, PlusCircle } from 'react-bootstrap-icons';
 class LandingPage extends Component {
 
     constructor(props) {
@@ -16,7 +16,8 @@ class LandingPage extends Component {
                 { name: 'Apple Tasks', id: '32', toDoList: [{ title: 'How to Buy an iPhone', description: 'hsdgfhsajgdfhgasjhdfghajsfhjasgdh', state: 'In Progress' }, { title: 'ICE Pack', description: 'hsdgfhsajgdfhgasjhdfghajsfhjasgdh', state: 'Done' }] }
             ],
             showProjectEditor: false,
-            projectTitle: null
+            projectTitle: null,
+            updatingProject: false
         };
 
     }
@@ -24,6 +25,7 @@ class LandingPage extends Component {
     componentDidMount() {
 
         this.setUser();
+        this.setState({ updatingProject: true });
         this.retrieveUserProject(JSON.parse(localStorage.getItem('toDo_authentication')).userId);
     }
 
@@ -31,6 +33,11 @@ class LandingPage extends Component {
         console.log('Retreive')
         let projectList = JSON.parse(localStorage.getItem('toDo_projectDirectory'));
         this.setState({ projects: projectList.find(e => e.userID === currentUser).projects });
+
+        const update = setTimeout(() => {
+            this.setState({ updatingProject: false })
+        }, 1000);
+        return () => clearTimeout(update);
     }
 
     setUser() {
@@ -58,13 +65,12 @@ class LandingPage extends Component {
                     <Row style={{ width: '100%' }} className="col-12 p-2 text-start d-flex flex-row m-0 text-monospace">
                         <h4 className="mt-2 p-1">Projects</h4>
                         <Button onClick={() => { this.setState({ showProjectEditor: true }) }} size="sm" className="ml-2" variant="outline-success">
-                            <Plus size={25} />
+                            <Plus size={30} />
                         </Button>
-                        <Accordion style={{ maxHeight: '100vh', overflowX: 'scroll' }} className="col-12 mt-4 p-0" defaultActiveKey="0">
-                            {this.state.projects.reverse().map((e, i) =>
+                        <Accordion style={{ maxHeight: '100vh', overflowX: 'scroll' }} className="col-12 mt-4 p-0" defaultActiveKey={0}>
+                            {this.state.updatingProject ? <Spinner animation="grow" variant="warning" /> : this.state.projects.reverse().map((e, i) =>
                                 <ProjectTab data={e} index={i} currentUser={this.state.user} />)}
 
-                            {/* <ProjectTab currentUser={this.state.user} /> */}
                         </Accordion>
                         <Modal size="md" centered show={this.state.showProjectEditor} onHide={() => this.setState({ showTaskEditor: false })}>
                             <Modal.Header closeButton>
@@ -89,9 +95,9 @@ class LandingPage extends Component {
                                 <Button variant="outline-primary" onClick={() => {
                                     this.props.createProject(JSON.parse(localStorage.getItem('toDo_authentication')).userId, this.state.projectTitle);
                                     this.componentDidMount();
-                                    this.setState({ showProjectEditor: false })
+                                    this.setState({ showProjectEditor: false, projectTitle: null })
                                 }}>Create</Button>
-                                <Button variant="outline-dark" onClick={() => { this.setState({ showProjectEditor: false }) }}>Cancel</Button>
+                                <Button variant="outline-dark" onClick={() => { this.setState({ showProjectEditor: false, projectTitle:null }) }}>Cancel</Button>
                             </Modal.Footer>
                         </Modal>
                     </Row>
