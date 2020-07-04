@@ -32,13 +32,11 @@ class SignUpModal extends Component {
 
     signUpUser() {
 
-        let userID = '12378';
-
         let user = {
             firstName: this.state.firstName,
             lastName: this.state.lastName,
             username: this.state.username,
-            password: this.state.firstName,
+            password: this.state.password,
             userId: Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15)
         }
 

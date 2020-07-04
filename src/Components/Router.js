@@ -11,6 +11,7 @@ class RouterElement extends Component {
         this.state = {
             loggedIn: false
         }
+        this.landingPage = React.createRef();
     }
 
     localStorageSetup() {
@@ -85,6 +86,7 @@ class RouterElement extends Component {
 
         projectArray.find(e => e.userID === user).projects = userProjects;
         localStorage.setItem('toDo_projectDirectory', JSON.stringify(projectArray));
+        this.landingPage.current.retrieveUserProject();
         console.log(JSON.parse(localStorage.getItem('toDo_projectDirectory')));
 
     }
@@ -96,7 +98,7 @@ class RouterElement extends Component {
                 <Switch>
                     {this.state.loggedIn ?
                         <Route path="/" render={({ history }) => (
-                            <LandingPage createProject={(user) => this.createNewProject(user)} logOut={() => this.logOut()} history={history} />
+                            <LandingPage ref={this.landingPage} createProject={(user) => this.createNewProject(user)} logOut={() => this.logOut()} history={history} />
                         )} /> :
                         <Route path="/">
                             <AuthenticationPage login={() => this.setState({ loggedIn: true })} signUp={(data) => this.signUpUser(data)} />

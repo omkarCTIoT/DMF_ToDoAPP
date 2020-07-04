@@ -15,7 +15,8 @@ class LandingPage extends Component {
                 { name: 'Cooking Class', id: '43', toDoList: [{ title: 'Learn to Cook', description: 'hsdgfhsajgdfhgasjhdfghajsfhjasgdh', state: 'To Do' }, { title: 'Learn to Eat', description: 'hsdgfhsajgdfhgasjhdfghajsfhjasgdh', state: 'Done' }] },
                 { name: 'Apple Tasks', id: '32', toDoList: [{ title: 'How to Buy an iPhone', description: 'hsdgfhsajgdfhgasjhdfghajsfhjasgdh', state: 'In Progress' }, { title: 'ICE Pack', description: 'hsdgfhsajgdfhgasjhdfghajsfhjasgdh', state: 'Done' }] }
             ]
-        }
+        };
+
     }
 
     componentDidMount() {
@@ -25,7 +26,7 @@ class LandingPage extends Component {
     }
 
     retrieveUserProject(currentUser) {
-
+        console.log('Retreive')
         let projectList = JSON.parse(localStorage.getItem('toDo_projectDirectory'));
         this.setState({ projects: projectList.find(e => e.userID === currentUser).projects });
     }
@@ -37,7 +38,6 @@ class LandingPage extends Component {
     }
 
     render() {
-        console.log(this.state.user);
 
         return (
             this.state.user !== null ?
@@ -55,11 +55,11 @@ class LandingPage extends Component {
                     </Row>
                     <Row style={{ width: '100%' }} className="col-12 p-2 text-start d-flex flex-row m-0 text-monospace">
                         <h4 className="mt-2 p-1">Projects</h4>
-                        <Button onClick={() => this.props.createProject(JSON.parse(localStorage.getItem('toDo_authentication')).userId)} size="sm" className="ml-2" variant="outline-success">
+                        <Button onClick={() => { this.props.createProject(JSON.parse(localStorage.getItem('toDo_authentication')).userId); this.componentDidMount() }} size="sm" className="ml-2" variant="outline-success">
                             <Plus size={25} />
                         </Button>
-                        <Accordion className="col-12 mt-4 p-0" defaultActiveKey="0">
-                            {this.state.projects.map((e, i) =>
+                        <Accordion style={{maxHeight:'100vh', overflowX:'scroll'}} className="col-12 mt-4 p-0" defaultActiveKey="0">
+                            {this.state.projects.reverse().map((e, i) =>
                                 <ProjectTab data={e} index={i} currentUser={this.state.user} />)}
 
                             {/* <ProjectTab currentUser={this.state.user} /> */}
