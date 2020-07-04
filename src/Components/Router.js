@@ -73,13 +73,13 @@ class RouterElement extends Component {
 
     }
 
-    createNewProject(user){
+    createNewProject(user, title){
         let projectArray = JSON.parse(localStorage.getItem('toDo_projectDirectory'));
 
         let userProjects = projectArray.find(e => e.userID === user).projects;
 
         userProjects.push({
-            "name": 'Sample Project' + userProjects.length + 1 ,
+            "name": title ,
             "id": userProjects.length + 1,
             "toDoList": [{ "title": 'Sample Task 1', "description": null, "state": 'To Do', "task_id": 1 }]
         })
@@ -98,7 +98,7 @@ class RouterElement extends Component {
                 <Switch>
                     {this.state.loggedIn ?
                         <Route path="/" render={({ history }) => (
-                            <LandingPage ref={this.landingPage} createProject={(user) => this.createNewProject(user)} logOut={() => this.logOut()} history={history} />
+                            <LandingPage ref={this.landingPage} createProject={(user, title) => this.createNewProject(user, title)} logOut={() => this.logOut()} history={history} />
                         )} /> :
                         <Route path="/">
                             <AuthenticationPage login={() => this.setState({ loggedIn: true })} signUp={(data) => this.signUpUser(data)} />
