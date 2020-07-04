@@ -19,7 +19,13 @@ class RouterElement extends Component {
 
         let userList = [];
         localStorage.setItem('toDo_userList', JSON.stringify(userList));
+
+        let projects = [];
+        localStorage.setItem('toDo_projectDirectory', JSON.stringify(projects));
+
+        console.log(JSON.parse(localStorage.getItem('toDo_projectDirectory')));
     }
+
 
     logOut() {
         let loginStructure = { "loggedIn": false, "userId": null, "password": null };
@@ -35,7 +41,8 @@ class RouterElement extends Component {
         this.setState({ loggedIn: JSON.parse(localStorage.getItem('toDo_authentication')).loggedIn })
 
         console.log(JSON.parse(localStorage.getItem('toDo_authentication')));
-        console.log(JSON.parse(localStorage.getItem('toDo_userList')))
+        console.log(JSON.parse(localStorage.getItem('toDo_userList')));
+        console.log(JSON.parse(localStorage.getItem('toDo_projectDirectory')))
     }
 
     signUpUser(user) {
@@ -44,8 +51,42 @@ class RouterElement extends Component {
 
         userList.push(user);
         localStorage.setItem('toDo_userList', JSON.stringify(userList));
-
+        console.log(user.userId);
+        this.setupProjectDirectory(user.userId)
         console.log(JSON.parse(localStorage.getItem('toDo_userList')));
+    }
+
+    setupProjectDirectory(userID) {
+        let project = {
+            "userID": userID,
+            "projects": [{
+                "name": 'Sample Project',
+                "id": 1,
+                "toDoList": [{ "title": 'Sample Task 1', "description": null, "state": 'To Do', "task_id": 1 }]
+            }]
+        }
+        let projectArray = [JSON.parse(localStorage.getItem('toDo_projectDirectory'))];
+
+        projectArray.push(project);
+        localStorage.setItem('toDo_projectDirectory', JSON.stringify(projectArray));
+
+    }
+
+    createNewProject(user){
+        let projectArray = JSON.parse(localStorage.getItem('toDo_projectDirectory'));
+
+        let userProjects = projectArray.find(e => e.userID === user).projects;
+
+        userProjects.push({
+            "name": 'Sample Project' + userProjects.length + 1 ,
+            "id": userProjects.length + 1,
+            "toDoList": [{ "title": 'Sample Task 1', "description": null, "state": 'To Do', "task_id": 1 }]
+        })
+
+        projectArray.find(e => e.userID === user).projects = userProjects;
+        localStorage.setItem('toDo_projectDirectory', JSON.stringify(projectArray));
+        console.log(JSON.parse(localStorage.getItem('toDo_projectDirectory')));
+
     }
 
     render() {
@@ -55,7 +96,7 @@ class RouterElement extends Component {
                 <Switch>
                     {this.state.loggedIn ?
                         <Route path="/" render={({ history }) => (
-                            <LandingPage logOut={() => this.logOut()} history={history} />
+                            <LandingPage createProject={(user) => this.createNewProject(user)} logOut={() => this.logOut()} history={history} />
                         )} /> :
                         <Route path="/">
                             <AuthenticationPage login={() => this.setState({ loggedIn: true })} signUp={(data) => this.signUpUser(data)} />

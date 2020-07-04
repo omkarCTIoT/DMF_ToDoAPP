@@ -37,10 +37,7 @@ class ProjectTab extends Component {
                 </Accordion.Toggle>
                 <Accordion.Collapse eventKey={this.props.index}>
                     <Card.Body style={{ minHeight: '300px', maxHeight: '300px', overflowX: 'scroll' }}>
-
                         {this.props.data.toDoList.map((e, i) => <TodoTab data={e}/>)}
-
-
                     </Card.Body>
                 </Accordion.Collapse>
             </Card>
