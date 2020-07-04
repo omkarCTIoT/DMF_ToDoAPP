@@ -21,6 +21,12 @@ class RouterElement extends Component {
         localStorage.setItem('toDo_userList', JSON.stringify(userList));
     }
 
+    logOut() {
+        let loginStructure = { "loggedIn": false, "userId": null, "password": null };
+        localStorage.setItem('toDo_authentication', JSON.stringify(loginStructure));
+        this.setState({ loggedIn: false })
+    }
+
     componentDidMount() {
         if (JSON.parse(localStorage.getItem('toDo_authentication')) === null) {
             this.localStorageSetup();
@@ -48,11 +54,11 @@ class RouterElement extends Component {
             <Router>
                 <Switch>
                     {this.state.loggedIn ?
-                        <Route path="/todo" render={({ history }) => (
-                            <LandingPage history={history} />
+                        <Route path="/" render={({ history }) => (
+                            <LandingPage logOut={() => this.logOut()} history={history} />
                         )} /> :
                         <Route path="/">
-                            <AuthenticationPage signUp={(data) => this.signUpUser(data)} />
+                            <AuthenticationPage login={() => this.setState({ loggedIn: true })} signUp={(data) => this.signUpUser(data)} />
                         </Route>}
 
 

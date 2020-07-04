@@ -11,7 +11,28 @@ class LandingPage extends Component {
             username: null,
             password: null,
             showSignUpModal: false,
+            error: null
         }
+    }
+
+
+    signIn() {
+        let userList = JSON.parse(localStorage.getItem('toDo_userList'));
+        let user = userList.find(e => e.username === this.state.username);
+        console.log(user);
+        if (typeof (user) !== 'undefined') {
+
+            if (user.password === this.state.password) {
+                let loginData = { "loggedIn": true, "userId": user.userId, "password": user.password };
+                localStorage.setItem('toDo_authentication', JSON.stringify(loginData));
+                this.props.login();
+            }
+
+            this.setState({ error: null })
+        } else {
+            this.setState({ error: 'User does not exist' })
+        }
+
     }
 
     render() {
@@ -29,7 +50,7 @@ class LandingPage extends Component {
                         <Form.Label><h5>Password</h5></Form.Label>
                         <Form.Control value={this.state.password} onChange={(e) => this.setState({ password: e.target.value })} type="password" placeholder="Password" />
                     </Form.Group>
-                    <Button  variant="primary">
+                    <Button onClick={() => this.signIn()} variant="primary">
                         Sign In
                     </Button>
                 </Form>
@@ -42,6 +63,7 @@ class LandingPage extends Component {
                             Sign Up
                     </Button>
                     </Form.Group>
+                    {this.state.error !== null ? <h6 className="text-danger">{this.state.error}</h6> : null}
                 </Form>
                 <SignUpModal
                     showModal={this.state.showSignUpModal}
