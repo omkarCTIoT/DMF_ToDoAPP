@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { Button, Container, Form, Modal, Row, Col } from 'react-bootstrap';
 import { Link } from "react-router-dom";
 import SignUpModal from '../Components/SignUpModal';
-
+import { BoxArrowInRight } from 'react-bootstrap-icons';
 class LandingPage extends Component {
 
     constructor(props) {
@@ -51,14 +51,14 @@ class LandingPage extends Component {
                         <Form.Control value={this.state.password} onChange={(e) => this.setState({ password: e.target.value })} type="password" placeholder="Password" />
                     </Form.Group>
                     <Button onClick={() => this.signIn()} variant="primary">
-                        Sign In
+                        <BoxArrowInRight size={30} />
                     </Button>
                 </Form>
                 <Form >
                     <Form.Group className="mt-5 d-flex flex-row justify-content-between">
-                        <Button size="sm" variant="outline-dark">
+                        {/* <Button size="sm" disabled variant="dark">
                             Forgot Password
-                    </Button>
+                    </Button> */}
                         <Button onClick={() => this.setState({ showSignUpModal: true })} size="sm" variant="outline-dark ">
                             Sign Up
                     </Button>

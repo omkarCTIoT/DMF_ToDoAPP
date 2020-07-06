@@ -25,10 +25,10 @@ class ProjectTab extends Component {
             <Card className="border-dark">
                 <Accordion.Toggle className={this.props.index % 2 === 0 ? "bg-dark text-white" : "bg-secondary text-white"} as={Card.Header} eventKey={this.props.index}>
                     <span className="col-12 d-flex justify-content-between">
-                        <h6>{this.props.data.name} </h6>
-                        <Button size="sm" className="ml-2 d-flex align-items-center" variant="info">
+                        <h4>{this.props.data.name} </h4>
+                        {/* <Button size="sm" className="ml-2 d-flex align-items-center" variant="info">
                             Add Task <Plus className="ml-2" color="white" size={25} />
-                        </Button>
+                        </Button> */}
                     </span>
                     <blockquote className="blockquote mb-0">
                         <footer style={{ fontSize: 12 }} className="text-white blockquote-footer">
@@ -40,7 +40,9 @@ class ProjectTab extends Component {
                 <Accordion.Collapse eventKey={this.props.index}>
 
                     <Card.Body style={{ minHeight: '300px', maxHeight: '300px', overflowX: 'scroll' }}>
-
+                    <Button size="md" className="ml-2 d-flex align-items-center" variant="info">
+                            Add Task <Plus className="ml-2" color="white" size={25} />
+                        </Button>
                         {this.props.data.toDoList.reverse().map((e, i) => <TodoTab data={e} />)}
                     </Card.Body>
                 </Accordion.Collapse>
