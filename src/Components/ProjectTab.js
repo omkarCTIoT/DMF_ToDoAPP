@@ -63,7 +63,7 @@ class ProjectTab extends Component {
                         </Button>
                         {this.state.toDoList === null ? <Col className="col-12 text-center"><Spinner animation="border" /> <p>Loading</p></Col> :
                             <Row className="col-12 d-flex flex-row p-0 m-0 justify-content-around">
-                            {this.state.toDoList.reverse().map((e, i) => <TodoTab data={e} />)}
+                            {this.state.toDoList.reverse().map((e, i) => <TodoTab update={() => this.props.update()} projectID={this.props.data.id} user={this.state.user.userId} data={e} />)}
                             </Row>}
                     </Card.Body>
                 </Accordion.Collapse>

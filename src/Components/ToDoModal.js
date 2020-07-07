@@ -12,7 +12,7 @@ class ToDoModal extends Component {
             showTaskEditor: false,
             edit: false,
             title: null,
-            state: "To Do",
+            state: null,
             description: null,
             task_id: null
         }
@@ -23,16 +23,20 @@ class ToDoModal extends Component {
         if (!this.props.create) {
             this.setState({ title: this.props.data.title, state: this.props.data.state, description: this.props.data.description, task_id: this.props.data.task_id });
 
-            if (this.props.data.state === "In Progress") {
-                this.setState({ taskColor: 'success' })
-            } else if (this.props.data.state === "To Do") {
-                this.setState({ taskColor: 'warning' })
-            } else if (this.props.data.state === "Done") {
-                this.setState({ taskColor: 'primary' })
-            }
+            this.updateState()
         }
 
 
+    }
+
+    updateState() {
+        if (this.state.state === "In Progress") {
+            this.setState({ taskColor: 'success' })
+        } else if (this.state.state === "To Do") {
+            this.setState({ taskColor: 'warning' })
+        } else if (this.state.state === "Done") {
+            this.setState({ taskColor: 'primary' })
+        }
     }
 
     resetTaskDetails() {
@@ -101,21 +105,25 @@ class ToDoModal extends Component {
                                 <Col>
                                     <Form.Group>
                                         <Form.Label><h5>Title:</h5></Form.Label>
-                                        <Form.Control readOnly={!this.state.edit} onChange={(e) => this.setState({ title: e.target.value })}
+                                        <Form.Control
+                                            readOnly={!this.state.edit}
+                                            onChange={(e) => this.setState({ title: e.target.value })}
                                             value={this.state.title} placeholder="Title" />
                                     </Form.Group>
                                 </Col>
                                 <Col>
-                                    <Form.Group >
-                                        <Form.Label ><h5>State:</h5></Form.Label>
+                                    <Form.Group>
+                                        <Form.Label><h5>State:</h5></Form.Label>
                                         {this.state.edit ? <Form.Control
                                             as="select"
                                             className="mr-sm-2"
                                             custom
+                                            value={this.state.state}
+                                            onChange={(e) => { this.setState({ state: e.target.value }) }}
                                         >
-                                            <option value="1">To Do</option>
-                                            <option value="2">In Progress</option>
-                                            <option value="3">Done</option>
+                                            <option value="To Do">To Do</option>
+                                            <option value="In Progress">In Progress</option>
+                                            <option value="Done">Done</option>
                                         </Form.Control> : <Button className="ml-3" variant={this.state.taskColor}>{this.state.state}</Button>}
 
                                     </Form.Group>
@@ -134,7 +142,7 @@ class ToDoModal extends Component {
                         </Form>
                     </Modal.Body>
                     <Modal.Footer>
-                        {!this.state.edit ? <Button variant="outline-primary" onClick={() => { this.setState({ edit: true }) }}>Edit</Button> : <Button variant="outline-success" onClick={() => { this.setState({ edit: true }); this.props.closeTaskEditor() }}>Save</Button>}
+                        {!this.state.edit ? <Button variant="outline-primary" onClick={() => { this.setState({ edit: true }) }}>Edit</Button> : <Button variant="outline-success" onClick={() => { this.setState({ edit: false }); this.props.editTask(this.state.task_id, this.state.title, this.state.description, this.state.state); this.updateState() }}>Save</Button>}
                         {this.state.edit ? <Button variant="outline-dark" onClick={() => { this.setState({ edit: false }) }}>Cancel</Button> : null}
                     </Modal.Footer>
                 </Modal>
