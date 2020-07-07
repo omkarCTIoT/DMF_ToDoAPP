@@ -132,11 +132,10 @@ class ProjectTab extends Component {
                             <Button size="sm" onClick={() => this.setState({ showTaskCreator: true })} className="ml-2  " variant="info">
                                 Add Task <Plus className="ml-2" color="white" size={25} />
                             </Button>
-                            <Form.Group style={{fontSize:'1em'}} className="p-2 d-none d-sm-flex flex-column">
+                            <Form.Group style={{fontSize:'1em'}} className="p-1 d-none d-sm-flex flex-column">
                                 <Form.Label>Filter:</Form.Label>
                                 <Form.Control
                                     as="select"
-                                    
                                     custom
                                     value={this.state.filter}
                                     onChange={(e) => { this.setState({ filter: e.target.value }) }} >
