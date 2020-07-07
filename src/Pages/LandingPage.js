@@ -89,7 +89,7 @@ class LandingPage extends Component {
                     <h5>No Projects Created</h5>
                 </Row>
         } else {
-            return this.state.projects.length > 0 ? this.state.projects.filter(item => item.name.toLowerCase().includes(this.state.projectSearch.toLowerCase())).reverse().map((e, i) =>
+            return this.state.projects.filter(item => item.name.toLowerCase().includes(this.state.projectSearch.toLowerCase())).length > 0 ? this.state.projects.filter(item => item.name.toLowerCase().includes(this.state.projectSearch.toLowerCase())).reverse().map((e, i) =>
                 <ProjectTab
                     deleteProject={(id) => this.deleteProject(id)}
                     update={() => this.componentDidMount()}
@@ -97,7 +97,7 @@ class LandingPage extends Component {
                     index={i}
                     currentUser={this.state.user} />) :
                 <Row className="d-flex mt-3 flex-column col-12 align-items-center justify-content-center">
-                    <h5>No Projects Created</h5>
+                    <h5>No Projects Found</h5>
                 </Row>
         }
     }

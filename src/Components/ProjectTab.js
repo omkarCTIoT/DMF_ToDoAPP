@@ -97,13 +97,15 @@ class ProjectTab extends Component {
                 data={e} />)
         } else{
 
-            return this.state.toDoList.filter(item => item.state === this.state.filter).reverse().map((e) =>
+            return this.state.toDoList.filter(item => item.state === this.state.filter).length > 0 ? this.state.toDoList.filter(item => item.state === this.state.filter).reverse().map((e) =>
             <TodoTab
                 deleteTask={(id) => this.deleteTask(id)}
                 update={() => this.getToDoList(this.state.user)}
                 projectID={this.props.data.id}
                 user={this.state.user.userId}
-                data={e} />)
+                data={e} />) : <Row className="d-flex mt-3 flex-column col-12 align-items-center justify-content-center">
+                <h5>No Tasks Found</h5>
+            </Row>
         }
     }
 
