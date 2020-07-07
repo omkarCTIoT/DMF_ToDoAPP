@@ -70,7 +70,7 @@ class TodoTab extends Component {
 
         return (
             this.state.taskData === null ? null :
-                <Alert className="m-3 col-sm-12  col-md-5 col-lg-3" style={{ maxHeight: '140px', overflowX: 'scroll' }} variant="dark">
+                <Alert className="m-2 col-sm-12  col-md-5 col-lg-3" style={{ maxHeight: '140px', overflowX: 'scroll' }} variant="dark">
                     <Alert.Heading style={{ cursor: 'pointer' }}>
                         <span className="d-flex justify-content-between">
                             <h5 style={{ color: 'royalblue' }} >{this.props.data.title}</h5>

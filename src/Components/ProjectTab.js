@@ -1,8 +1,8 @@
 import React, { Component } from 'react';
-import { Button, Container, Col, footer, Badge, Spinner, Card, Row, Accordion, ButtonGroup } from 'react-bootstrap';
+import { Button, Container, Col, footer, Form, Spinner, Card, Row, Accordion, ButtonGroup } from 'react-bootstrap';
 import { Link } from "react-router-dom";
 import TodoTab from '../Components/TodoTab';
-import { Plus, FileMinus } from 'react-bootstrap-icons';
+import { Plus } from 'react-bootstrap-icons';
 import ToDoModal from '../Components/ToDoModal';
 class ProjectTab extends Component {
 
@@ -12,7 +12,8 @@ class ProjectTab extends Component {
             user: null,
             showTaskCreator: false,
             toDoList: null,
-            loading: true
+            loading: true,
+            filter: 'Select'
         }
     }
 
@@ -84,6 +85,29 @@ class ProjectTab extends Component {
         }, 1300);
         return () => clearTimeout(update);
     }
+
+    renderToDoList(){
+
+        if(this.state.filter === 'Select'){
+            return this.state.toDoList.reverse().map((e) =>
+            <TodoTab
+                deleteTask={(id) => this.deleteTask(id)}
+                update={() => this.getToDoList(this.state.user)}
+                projectID={this.props.data.id}
+                user={this.state.user.userId}
+                data={e} />)
+        } else{
+
+            return this.state.toDoList.filter(item => item.state === this.state.filter).reverse().map((e) =>
+            <TodoTab
+                deleteTask={(id) => this.deleteTask(id)}
+                update={() => this.getToDoList(this.state.user)}
+                projectID={this.props.data.id}
+                user={this.state.user.userId}
+                data={e} />)
+        }
+    }
+
     render() {
 
         return (
@@ -92,7 +116,7 @@ class ProjectTab extends Component {
                     <span className="col-12 d-flex justify-content-between">
                         <h5>{this.props.data.name}</h5>
                         <Button size="sm" onClick={() => this.props.deleteProject(this.props.data.id)} className="ml-5 d-flex align-items-center" variant="danger">
-                            Delete 
+                            Delete
                         </Button>
                     </span>
                     <blockquote className="blockquote mb-0">
@@ -105,11 +129,26 @@ class ProjectTab extends Component {
                 <Accordion.Collapse eventKey={this.props.index}>
 
                     <Card.Body style={{ minHeight: '300px', maxHeight: '300px', overflowX: 'scroll' }}>
+                        <Row className="flex-row d-flex align-items-center justify-content-between">
+                            <Button size="sm" onClick={() => this.setState({ showTaskCreator: true })} className="ml-2  " variant="info">
+                                Add Task <Plus className="ml-2" color="white" size={25} />
+                            </Button>
+                            <Form.Group>
+                                <Form.Label>Filter:</Form.Label>
+                                <Form.Control
+                                    as="select"
+                                    className="mr-sm-2"
+                                    custom
+                                    value={this.state.filter}
+                                    onChange={(e) => { this.setState({ filter: e.target.value }) }} >
+                                    <option value="Select">Select</option>
+                                    <option value="To Do">To Do</option>
+                                    <option value="In Progress">In Progress</option>
+                                    <option value="Done">Done</option>
+                                </Form.Control>
 
-                        <Button size="md" onClick={() => this.setState({ showTaskCreator: true })} className="ml-2  d-flex align-items-center" variant="info">
-                            Add Task <Plus className="ml-2" color="white" size={25} />
-                        </Button>
-
+                            </Form.Group>
+                        </Row>
                         <Row className="col-12 d-flex flex-row p-0 m-0 justify-content-around">
                             {this.state.loading ?
                                 <Row className="d-flex flex-column col-12 align-items-center justify-content-center">
@@ -118,13 +157,7 @@ class ProjectTab extends Component {
                                 </Row>
                                 :
                                 this.state.toDoList.length > 0 ?
-                                    this.state.toDoList.reverse().map((e) =>
-                                        <TodoTab
-                                            deleteTask={(id) => this.deleteTask(id)}
-                                            update={() => this.getToDoList(this.state.user)}
-                                            projectID={this.props.data.id}
-                                            user={this.state.user.userId}
-                                            data={e} />) :
+                                    this.renderToDoList() :
                                     <Row className="d-flex mt-3 flex-column col-12 align-items-center justify-content-center">
                                         <h3>No Tasks Created</h3>
                                     </Row>
@@ -137,7 +170,7 @@ class ProjectTab extends Component {
                     showTaskCreator={this.state.showTaskCreator}
                     closeTaskCreator={() => this.setState({ showTaskCreator: false })}
                     createTask={(title, description, state) => this.createNewTask(title, description, state)} />
-            </Card>
+            </Card >
         )
     }
 }

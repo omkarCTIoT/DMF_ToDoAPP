@@ -47,7 +47,7 @@ class LandingPage extends Component {
 
         let userProjects = projectArray.find(e => e.userID === this.state.user.userId).projects;
 
-        projectArray.find(e => e.userID === this.state.user.userId).projects = userProjects.filter(item => item.id !== projectID);;
+        projectArray.find(e => e.userID === this.state.user.userId).projects = userProjects.filter(item => item.id !== projectID);
         
         localStorage.setItem('toDo_projectDirectory', JSON.stringify(projectArray));
         

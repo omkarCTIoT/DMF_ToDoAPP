@@ -23,9 +23,16 @@ class SignUpModal extends Component {
         if (userList.find(e => e.username === this.state.username)) {
             this.setState({ error: 'Username is not available. Try Again !' })
 
-        } else {
-            this.signUpUser();
+        } 
+        else {
+
+            if(this.state.password.length < 8){
+                this.setState({error:'Password should have atleast 8 characters'})
+            } else{
+                this.signUpUser();
             this.setState({error: null})
+            }
+            
         }
 
     }
