@@ -66,7 +66,7 @@ class RouterElement extends Component {
                 "toDoList": [{ "title": 'Sample Task 1', "description": null, "state": 'To Do', "task_id": 1 }]
             }]
         }
-        let projectArray = [JSON.parse(localStorage.getItem('toDo_projectDirectory'))];
+        let projectArray = JSON.parse(localStorage.getItem('toDo_projectDirectory'));
 
         projectArray.push(project);
         localStorage.setItem('toDo_projectDirectory', JSON.stringify(projectArray));
@@ -81,7 +81,7 @@ class RouterElement extends Component {
         userProjects.push({
             "name": title ,
             "id": userProjects.length + 1,
-            "toDoList": [{ "title": 'Sample Task 1', "description": null, "state": 'To Do', "task_id": 1 }]
+            "toDoList": []
         })
 
         projectArray.find(e => e.userID === user).projects = userProjects;

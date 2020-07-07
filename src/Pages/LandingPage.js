@@ -24,20 +24,37 @@ class LandingPage extends Component {
         this.retrieveUserProject(JSON.parse(localStorage.getItem('toDo_authentication')).userId);
     }
 
+    createNewProject(user, title){
+        let projectArray = JSON.parse(localStorage.getItem('toDo_projectDirectory'));
+
+        let userProjects = projectArray.find(e => e.userID === user).projects;
+
+        userProjects.push({
+            "name": title ,
+            "id": userProjects.length + 1,
+            "toDoList": []
+        })
+
+        projectArray.find(e => e.userID === user).projects = userProjects;
+        localStorage.setItem('toDo_projectDirectory', JSON.stringify(projectArray));
+        this.retrieveUserProject(JSON.parse(localStorage.getItem('toDo_authentication')).userId);
+        console.log(JSON.parse(localStorage.getItem('toDo_projectDirectory')));
+
+    }
+
     retrieveUserProject(currentUser) {
-        console.log('Retreive')
+        console.log(currentUser)
         let projectList = JSON.parse(localStorage.getItem('toDo_projectDirectory'));
         this.setState({ projects: projectList.find(e => e.userID === currentUser).projects });
 
         const update = setTimeout(() => {
             this.setState({ updatingProject: false })
-        }, 1000);
+        }, 1300);
         return () => clearTimeout(update);
     }
 
     setUser() {
         let userList = JSON.parse(localStorage.getItem('toDo_userList'));
-
         this.setState({ user: userList.find(e => e.userId === JSON.parse(localStorage.getItem('toDo_authentication')).userId) });
     }
 
@@ -63,8 +80,13 @@ class LandingPage extends Component {
                             <Plus size={30} />
                         </Button>
                         <Accordion style={{ maxHeight: '100vh', overflowX: 'scroll' }} className="col-12 mt-4 p-0" defaultActiveKey={0}>
-                            {this.state.updatingProject ? <Spinner className="text-center" animation="grow" variant="warning" /> : this.state.projects.reverse().map((e, i) =>
-                                <ProjectTab update={() => this.componentDidMount()} data={e} index={i} currentUser={this.state.user} />)}
+                            {this.state.updatingProject ?
+                                <Row style={{ height: '100vh' }} className="d-flex flex-column col-12 align-items-center justify-content-center">
+                                    <Spinner className="text-center" animation="grow" variant="warning" />
+                                    <p>Loading</p>
+                                </Row>
+                                : this.state.projects.reverse().map((e, i) =>
+                                    <ProjectTab update={() => this.componentDidMount()} data={e} index={i} currentUser={this.state.user} />)}
 
                         </Accordion>
                         <Modal size="md" centered show={this.state.showProjectEditor} onHide={() => this.setState({ showTaskEditor: false })}>
@@ -87,12 +109,15 @@ class LandingPage extends Component {
                                 </Form>
                             </Modal.Body>
                             <Modal.Footer>
-                                <Button variant="outline-primary" onClick={() => {
-                                    this.props.createProject(JSON.parse(localStorage.getItem('toDo_authentication')).userId, this.state.projectTitle);
-                                    this.componentDidMount();
-                                    this.setState({ showProjectEditor: false, projectTitle: null })
-                                }}>Create</Button>
-                                <Button variant="outline-dark" onClick={() => { this.setState({ showProjectEditor: false, projectTitle:null }) }}>Cancel</Button>
+                                <Button 
+                                disabled={this.state.projectTitle === null}
+                                variant="outline-primary"
+                                    onClick={() => {
+                                        this.createNewProject(JSON.parse(localStorage.getItem('toDo_authentication')).userId, this.state.projectTitle);
+                                        this.retrieveUserProject(JSON.parse(localStorage.getItem('toDo_authentication')).userId);
+                                        this.setState({ showProjectEditor: false, projectTitle: null })
+                                    }}>Create</Button>
+                                <Button variant="outline-dark" onClick={() => { this.setState({ showProjectEditor: false, projectTitle: null }) }}>Cancel</Button>
                             </Modal.Footer>
                         </Modal>
                     </Row>

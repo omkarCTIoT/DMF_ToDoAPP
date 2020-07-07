@@ -26,11 +26,14 @@ class LandingPage extends Component {
                 let loginData = { "loggedIn": true, "userId": user.userId, "password": user.password };
                 localStorage.setItem('toDo_authentication', JSON.stringify(loginData));
                 this.props.login();
+                this.setState({ error: null });
+            } else{
+                this.setState({error: 'Password is incorrect.' })
             }
 
-            this.setState({ error: null })
+            
         } else {
-            this.setState({ error: 'User does not exist' })
+            this.setState({ error: 'Username is not registered.' })
         }
 
     }
@@ -50,7 +53,8 @@ class LandingPage extends Component {
                         <Form.Label><h5>Password</h5></Form.Label>
                         <Form.Control value={this.state.password} onChange={(e) => this.setState({ password: e.target.value })} type="password" placeholder="Password" />
                     </Form.Group>
-                    <Button onClick={() => this.signIn()} variant="primary">
+                    {this.state.error !== null ? <h6 className="text-danger">{this.state.error}</h6> : null}
+                    <Button disabled={this.state.username === null || this.state.password=== null} onClick={() => this.signIn()} variant="primary">
                         <BoxArrowInRight size={30} />
                     </Button>
                 </Form>
@@ -63,7 +67,7 @@ class LandingPage extends Component {
                             Sign Up
                     </Button>
                     </Form.Group>
-                    {this.state.error !== null ? <h6 className="text-danger">{this.state.error}</h6> : null}
+                    
                 </Form>
                 <SignUpModal
                     showModal={this.state.showSignUpModal}

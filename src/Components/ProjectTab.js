@@ -11,17 +11,34 @@ class ProjectTab extends Component {
         this.state = {
             user: null,
             showTaskCreator: false,
-            toDoList: null
+            toDoList: null,
+            loading: true
         }
     }
 
     componentDidMount() {
 
-        this.setState({ user: this.props.currentUser, toDoList: this.props.data.toDoList })
+        this.getToDoList(this.props.currentUser);
+        this.setState({ user: this.props.currentUser, loading: false })
+    }
+
+    getToDoList(user) {
+
+        let projectArray = JSON.parse(localStorage.getItem('toDo_projectDirectory'));
+
+        let userProjects = projectArray.find(e => e.userID === user.userId).projects;
+
+
+        let userTodoList = userProjects.find(e => e.id === this.props.data.id).toDoList;
+
+        this.setState({ toDoList: userTodoList });
+
     }
 
 
     createNewTask(title, description, state) {
+
+        this.setState({ loading: true });
 
         let projectArray = JSON.parse(localStorage.getItem('toDo_projectDirectory'));
 
@@ -36,11 +53,37 @@ class ProjectTab extends Component {
 
         localStorage.setItem('toDo_projectDirectory', JSON.stringify(projectArray));
         this.setState({ showtaskCreator: false })
-
-        this.props.update();
-        this.componentDidMount();
+        this.getToDoList(this.state.user);
+        const update = setTimeout(() => {
+            this.setState({ loading: false })
+        }, 1300);
+        return () => clearTimeout(update);
     }
 
+
+    deleteTask(task_ID) {
+        console.log(task_ID);
+        this.setState({ loading: true });
+
+        let projectArray = JSON.parse(localStorage.getItem('toDo_projectDirectory'));
+
+        let userProjects = projectArray.find(e => e.userID === this.state.user.userId).projects;
+
+        let userTodoList = userProjects.find(e => e.id === this.props.data.id).toDoList;
+        //userTodoList.push({ "title": title, "description": description, "state": state, "task_id": userTodoList.length + 1 });
+        
+        console.log(userTodoList);
+        userProjects.find(e => e.id === this.props.data.id).toDoList = userTodoList.filter(item => item.task_id !== task_ID);
+        projectArray.find(e => e.userID === this.state.user.userId).projects = userProjects;
+
+
+        localStorage.setItem('toDo_projectDirectory', JSON.stringify(projectArray));
+        this.getToDoList(this.state.user);
+        const update = setTimeout(() => {
+            this.setState({ loading: false })
+        }, 1300);
+        return () => clearTimeout(update);
+    }
     render() {
 
         return (
@@ -58,13 +101,29 @@ class ProjectTab extends Component {
                 </Accordion.Toggle>
                 <Accordion.Collapse eventKey={this.props.index}>
                     <Card.Body style={{ minHeight: '300px', maxHeight: '300px', overflowX: 'scroll' }}>
-                        <Button size="md" onClick={() => this.setState({ showTaskCreator: true })} className="ml-2 d-flex align-items-center" variant="info">
+                        <Button size="md" onClick={() => this.setState({ showTaskCreator: true })} className="ml-2 sticky-top d-flex align-items-center" variant="info">
                             Add Task <Plus className="ml-2" color="white" size={25} />
                         </Button>
-                        {this.state.toDoList === null ? <Col className="col-12 text-center"><Spinner animation="border" /> <p>Loading</p></Col> :
-                            <Row className="col-12 d-flex flex-row p-0 m-0 justify-content-around">
-                            {this.state.toDoList.reverse().map((e, i) => <TodoTab update={() => this.props.update()} projectID={this.props.data.id} user={this.state.user.userId} data={e} />)}
-                            </Row>}
+                        <Row className="col-12 d-flex flex-row p-0 m-0 justify-content-around">
+                            {this.state.loading ?
+                                <Row className="d-flex flex-column col-12 align-items-center justify-content-center">
+                                    <h3>Loading..</h3>
+                                    <Spinner className="text-center" animation="grow" variant="danger" />
+                                </Row>
+                                :
+                                this.state.toDoList.length > 0 ?
+                                    this.state.toDoList.reverse().map((e) =>
+                                        <TodoTab
+                                            deleteTask={(id) => this.deleteTask(id)}
+                                            update={() => this.getToDoList(this.state.user)}
+                                            projectID={this.props.data.id}
+                                            user={this.state.user.userId}
+                                            data={e} />) :
+                                    <Row className="d-flex flex-column col-12 align-items-center justify-content-center">
+                                        <h3>No Tasks Created</h3>
+                                    </Row>
+                            }
+                        </Row>
                     </Card.Body>
                 </Accordion.Collapse>
                 <ToDoModal

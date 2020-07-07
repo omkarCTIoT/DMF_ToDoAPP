@@ -8,22 +8,13 @@ class TodoTab extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            taskColor: 'success',
-            showTaskEditor: false
+            showTaskEditor: false,
+            taskData: null
         }
     }
 
     componentDidMount() {
-
-
-
-        if (this.props.data.state === "In Progress") {
-            this.setState({ taskColor: 'success' })
-        } else if (this.props.data.state === "To Do") {
-            this.setState({ taskColor: 'warning' })
-        } else if (this.props.data.state === "Done") {
-            this.setState({ taskColor: 'primary' })
-        }
+        this.setState({ taskData: this.props.data });
     }
 
     resetTaskDetails() {
@@ -40,7 +31,7 @@ class TodoTab extends Component {
         let currentTask = userTodoList.find(e => e.task_id === task_ID);
         currentTask = { "title": title, "description": description, "state": state, "task_id": task_ID }
 
-        
+
         userTodoList.find(e => e.task_id === task_ID).title = title;
         userTodoList.find(e => e.task_id === task_ID).description = description;
         userTodoList.find(e => e.task_id === task_ID).state = state;
@@ -50,37 +41,57 @@ class TodoTab extends Component {
 
         localStorage.setItem('toDo_projectDirectory', JSON.stringify(projectArray));
 
-        //this.props.update();
-        
+        this.props.update();
+
+    }
+
+
+    updateState(state) {
+
+        switch (state) {
+            case 'In Progress':
+                // code block
+                return 'success'
+                break;
+            case 'To Do':
+                return 'warning'
+                break;
+            case 'Done':
+                return 'primary'
+                break;
+            default:
+            // code block
+        }
+
     }
 
     render() {
 
+
         return (
-            <Alert className="m-3 col-sm-12  col-md-5 col-lg-3" style={{ maxHeight: '140px', overflowX: 'scroll' }} variant="dark">
-                <Alert.Heading style={{ cursor: 'pointer' }}>
-                    <span className="d-flex justify-content-between">
-                        <h5 style={{ color: 'royalblue' }} >{this.props.data.title}</h5>
-                        <DropdownButton variant={this.state.taskColor} title={this.props.data.state}>
-                            <Dropdown.Item href="#/action-1">Delete</Dropdown.Item>
-                        </DropdownButton>
-                    </span>
-                    <hr />
-                    <span onClick={() => this.setState({ showTaskEditor: true })} className="d-flex justify-content-end">
-                        {/* <Badge variant={this.state.taskColor}>{this.props.data.state}</Badge> */}
+            this.state.taskData === null ? null :
+                <Alert className="m-3 col-sm-12  col-md-5 col-lg-3" style={{ maxHeight: '140px', overflowX: 'scroll' }} variant="dark">
+                    <Alert.Heading style={{ cursor: 'pointer' }}>
+                        <span className="d-flex justify-content-between">
+                            <h5 style={{ color: 'royalblue' }} >{this.props.data.title}</h5>
+                            <Button variant={this.updateState(this.props.data.state)}>
+                            {this.props.data.state}
+                                </Button>
+                        </span>
+                        <hr />
+                        <span onClick={() => { this.setState({ showTaskEditor: true }); }} className="d-flex justify-content-end">
+                            <PencilSquare color="black" size={22} />
+                        </span>
+                    </Alert.Heading>
 
-                        <PencilSquare color="black" size={22} />
-
-                    </span>
-                </Alert.Heading>
-
-                <ToDoModal
-                    showTaskEditor={this.state.showTaskEditor}
-                    data={this.props.data}
-                    closeTaskEditor={() => this.setState({ showTaskEditor: false })}
-                    create={false}
-                    editTask={(task_ID, title, description, state) => this.editTask(task_ID, title, description, state)} />
-            </Alert >
+                    <ToDoModal
+                        showTaskEditor={this.state.showTaskEditor}
+                        data={this.state.taskData}
+                        closeTaskEditor={() => this.setState({ showTaskEditor: false })}
+                        create={false}
+                        deleteTask={() => this.props.deleteTask(this.props.data.task_id)}
+                        editTask={(task_ID, title, description, state) => this.editTask(task_ID, title, description, state)} />
+                </Alert >
         )
     }
 }
