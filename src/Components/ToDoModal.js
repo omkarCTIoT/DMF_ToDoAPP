@@ -47,7 +47,7 @@ class ToDoModal extends Component {
 
     resetTaskDetails() {
 
-        this.setState({ title: null, state: null, description: null, error: null })
+        this.setState({ title: null, state: 'To Do', description: null, error: null })
     }
 
     createTask() {

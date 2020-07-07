@@ -1,8 +1,8 @@
 import React, { Component } from 'react';
-import { Button, Container, Col, footer, Badge, Spinner, Card, Row, Accordion, Modal } from 'react-bootstrap';
+import { Button, Container, Col, footer, Badge, Spinner, Card, Row, Accordion, ButtonGroup } from 'react-bootstrap';
 import { Link } from "react-router-dom";
 import TodoTab from '../Components/TodoTab';
-import { Plus, GripVertical } from 'react-bootstrap-icons';
+import { Plus, FileMinus } from 'react-bootstrap-icons';
 import ToDoModal from '../Components/ToDoModal';
 class ProjectTab extends Component {
 
@@ -71,7 +71,7 @@ class ProjectTab extends Component {
 
         let userTodoList = userProjects.find(e => e.id === this.props.data.id).toDoList;
         //userTodoList.push({ "title": title, "description": description, "state": state, "task_id": userTodoList.length + 1 });
-        
+
         console.log(userTodoList);
         userProjects.find(e => e.id === this.props.data.id).toDoList = userTodoList.filter(item => item.task_id !== task_ID);
         projectArray.find(e => e.userID === this.state.user.userId).projects = userProjects;
@@ -91,6 +91,9 @@ class ProjectTab extends Component {
                 <Accordion.Toggle style={{ cursor: 'pointer' }} className={this.props.index % 2 === 0 ? "bg-dark text-white" : "bg-secondary text-white"} as={Card.Header} eventKey={this.props.index}>
                     <span className="col-12 d-flex justify-content-between">
                         <h5>{this.props.data.name}</h5>
+                        <Button size="sm" onClick={() => this.props.deleteProject(this.props.data.id)} className="ml-5 d-flex align-items-center" variant="danger">
+                            Delete 
+                        </Button>
                     </span>
                     <blockquote className="blockquote mb-0">
                         <footer style={{ fontSize: 12 }} className="text-white blockquote-footer">
@@ -100,10 +103,13 @@ class ProjectTab extends Component {
 
                 </Accordion.Toggle>
                 <Accordion.Collapse eventKey={this.props.index}>
+
                     <Card.Body style={{ minHeight: '300px', maxHeight: '300px', overflowX: 'scroll' }}>
-                        <Button size="md" onClick={() => this.setState({ showTaskCreator: true })} className="ml-2 sticky-top d-flex align-items-center" variant="info">
+
+                        <Button size="md" onClick={() => this.setState({ showTaskCreator: true })} className="ml-2  d-flex align-items-center" variant="info">
                             Add Task <Plus className="ml-2" color="white" size={25} />
                         </Button>
+
                         <Row className="col-12 d-flex flex-row p-0 m-0 justify-content-around">
                             {this.state.loading ?
                                 <Row className="d-flex flex-column col-12 align-items-center justify-content-center">
@@ -119,7 +125,7 @@ class ProjectTab extends Component {
                                             projectID={this.props.data.id}
                                             user={this.state.user.userId}
                                             data={e} />) :
-                                    <Row className="d-flex flex-column col-12 align-items-center justify-content-center">
+                                    <Row className="d-flex mt-3 flex-column col-12 align-items-center justify-content-center">
                                         <h3>No Tasks Created</h3>
                                     </Row>
                             }

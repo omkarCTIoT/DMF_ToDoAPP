@@ -42,6 +42,18 @@ class LandingPage extends Component {
 
     }
 
+    deleteProject(projectID){
+        let projectArray = JSON.parse(localStorage.getItem('toDo_projectDirectory'));
+
+        let userProjects = projectArray.find(e => e.userID === this.state.user.userId).projects;
+
+        projectArray.find(e => e.userID === this.state.user.userId).projects = userProjects.filter(item => item.id !== projectID);;
+        
+        localStorage.setItem('toDo_projectDirectory', JSON.stringify(projectArray));
+        
+        this.retrieveUserProject(JSON.parse(localStorage.getItem('toDo_authentication')).userId);
+    }
+
     retrieveUserProject(currentUser) {
         console.log(currentUser)
         let projectList = JSON.parse(localStorage.getItem('toDo_projectDirectory'));
@@ -69,7 +81,7 @@ class LandingPage extends Component {
                             <h6 style={{ letterSpacing: 1 }}>Good Morning, {this.state.user.firstName}</h6>
                         </span>
                         <span className="p-4">
-                            <Button onClick={() => this.props.logOut()} size="sm" className="text-monospace " variant="danger">
+                            <Button onClick={() => this.props.logOut()} size="sm" className="text-monospace " variant="secondary">
                                 Sign Out
                         </Button>
                         </span>
@@ -86,7 +98,7 @@ class LandingPage extends Component {
                                     <p>Loading</p>
                                 </Row>
                                 : this.state.projects.reverse().map((e, i) =>
-                                    <ProjectTab update={() => this.componentDidMount()} data={e} index={i} currentUser={this.state.user} />)}
+                                    <ProjectTab deleteProject={(id) => this.deleteProject(id)} update={() => this.componentDidMount()} data={e} index={i} currentUser={this.state.user} />)}
 
                         </Accordion>
                         <Modal size="md" centered show={this.state.showProjectEditor} onHide={() => this.setState({ showTaskEditor: false })}>
