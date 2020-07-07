@@ -151,7 +151,7 @@ class ProjectTab extends Component {
                         <Row className="col-12 d-flex flex-row p-0 m-0 justify-content-around">
                             {this.state.loading ?
                                 <Row className="d-flex flex-column col-12 align-items-center justify-content-center">
-                                    <h3>Loading..</h3>
+                                    <h5 className="mt-5">Loading..</h5>
                                     <Spinner className="text-center" animation="grow" variant="danger" />
                                 </Row>
                                 :

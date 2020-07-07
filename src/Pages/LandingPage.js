@@ -12,6 +12,7 @@ class LandingPage extends Component {
             showProjectEditor: false,
             projectTitle: null,
             updatingProject: false,
+            projectSearch: ''
         };
 
     }
@@ -74,6 +75,33 @@ class LandingPage extends Component {
         this.setState({ user: userList.find(e => e.userId === JSON.parse(localStorage.getItem('toDo_authentication')).userId) });
     }
 
+    renderProjects() {
+
+        if (this.state.projectSearch.length === 0) {
+            return this.state.projects.length > 0 ? this.state.projects.reverse().map((e, i) =>
+                <ProjectTab
+                    deleteProject={(id) => this.deleteProject(id)}
+                    update={() => this.componentDidMount()}
+                    data={e}
+                    index={i}
+                    currentUser={this.state.user} />) :
+                <Row className="d-flex mt-3 flex-column col-12 align-items-center justify-content-center">
+                    <h5>No Projects Created</h5>
+                </Row>
+        } else {
+            return this.state.projects.length > 0 ? this.state.projects.filter(item => item.name.toLowerCase().includes(this.state.projectSearch.toLowerCase())).reverse().map((e, i) =>
+                <ProjectTab
+                    deleteProject={(id) => this.deleteProject(id)}
+                    update={() => this.componentDidMount()}
+                    data={e}
+                    index={i}
+                    currentUser={this.state.user} />) :
+                <Row className="d-flex mt-3 flex-column col-12 align-items-center justify-content-center">
+                    <h5>No Projects Created</h5>
+                </Row>
+        }
+    }
+
     render() {
 
         return (
@@ -91,26 +119,20 @@ class LandingPage extends Component {
                         </span>
                     </Row>
                     <Row style={{ width: '100%' }} className="col-12 p-2 text-start d-flex flex-row m-0 text-monospace">
-                        <h4 className="mt-2 p-1">Projects</h4>
-                        <Button onClick={() => { this.setState({ showProjectEditor: true }) }} size="sm" className="ml-2" variant="outline-success">
-                            <Plus size={30} />
-                        </Button>
-                        
+                        <h5 className="mt-2 p-1">Projects</h5>
+                        <Row className="d-flex flex-row col-12 justify-content-between">
+                            <Button onClick={() => { this.setState({ showProjectEditor: true }) }} size="sm" className="ml-2" variant="outline-success">
+                                <Plus size={30} />
+                            </Button>
+                            <Form.Control value={this.state.projectSearch} onChange={(e) => this.setState({ projectSearch: e.target.value })} className="col-xs-3 col-6" type="text" placeholder="Search for a Project" />
+                        </Row>
+
                         <Accordion style={{ maxHeight: '100vh', overflowX: 'scroll' }} className="col-12 mt-4 p-0" defaultActiveKey={0}>
                             {this.state.updatingProject ?
                                 <Row style={{ height: '50vh' }} className="d-flex flex-column col-12 align-items-center justify-content-center">
                                     <Spinner className="text-center p-3" animation="grow" variant="warning" />
                                 </Row>
-                                : this.state.projects.length > 0 ? this.state.projects.reverse().map((e, i) =>
-                                    <ProjectTab
-                                        deleteProject={(id) => this.deleteProject(id)}
-                                        update={() => this.componentDidMount()}
-                                        data={e}
-                                        index={i}
-                                        currentUser={this.state.user} />) :
-                                    <Row className="d-flex mt-3 flex-column col-12 align-items-center justify-content-center">
-                                        <h5>No Projects Created</h5>
-                                    </Row>}
+                                : this.renderProjects()}
 
                         </Accordion>
                         <Modal size="md" centered show={this.state.showProjectEditor} onHide={() => this.setState({ showTaskEditor: false })}>
