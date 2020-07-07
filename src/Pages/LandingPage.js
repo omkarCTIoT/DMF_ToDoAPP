@@ -64,7 +64,7 @@ class LandingPage extends Component {
                         </Button>
                         <Accordion style={{ maxHeight: '100vh', overflowX: 'scroll' }} className="col-12 mt-4 p-0" defaultActiveKey={0}>
                             {this.state.updatingProject ? <Spinner className="text-center" animation="grow" variant="warning" /> : this.state.projects.reverse().map((e, i) =>
-                                <ProjectTab data={e} index={i} currentUser={this.state.user} />)}
+                                <ProjectTab update={() => this.componentDidMount()} data={e} index={i} currentUser={this.state.user} />)}
 
                         </Accordion>
                         <Modal size="md" centered show={this.state.showProjectEditor} onHide={() => this.setState({ showTaskEditor: false })}>
