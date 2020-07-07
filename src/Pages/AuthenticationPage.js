@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
-import { Button, Container, Form, Modal, Row, Col } from 'react-bootstrap';
-import { Link } from "react-router-dom";
+import { Button, Container, Form } from 'react-bootstrap';
 import SignUpModal from '../Components/SignUpModal';
 import { BoxArrowInRight } from 'react-bootstrap-icons';
 class LandingPage extends Component {

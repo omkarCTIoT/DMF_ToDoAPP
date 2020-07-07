@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
-import { Button, Container, Col, DropdownButton, Dropdown, Badge, Alert, Row, Form, Accordion, Tooltip } from 'react-bootstrap';
-import { PencilSquare, CaretDownSquare } from 'react-bootstrap-icons';
+import { Button, Alert } from 'react-bootstrap';
+import { PencilSquare } from 'react-bootstrap-icons';
 import ToDoModal from '../Components/ToDoModal';
 
 class TodoTab extends Component {
@@ -50,7 +50,6 @@ class TodoTab extends Component {
 
         switch (state) {
             case 'In Progress':
-                // code block
                 return 'success'
                 break;
             case 'To Do':
@@ -60,7 +59,7 @@ class TodoTab extends Component {
                 return 'primary'
                 break;
             default:
-            // code block
+
         }
 
     }
@@ -75,8 +74,8 @@ class TodoTab extends Component {
                         <span className="d-flex justify-content-between">
                             <h5 style={{ color: 'royalblue' }} >{this.props.data.title}</h5>
                             <Button variant={this.updateState(this.props.data.state)}>
-                            {this.props.data.state}
-                                </Button>
+                                {this.props.data.state}
+                            </Button>
                         </span>
                         <hr />
                         <span onClick={() => { this.setState({ showTaskEditor: true }); }} className="d-flex justify-content-end">

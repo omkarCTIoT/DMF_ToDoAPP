@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
-import { Button, Container, Col, footer, Form, Spinner, Card, Row, Accordion, ButtonGroup } from 'react-bootstrap';
-import { Link } from "react-router-dom";
+import { Button, Form, Spinner, Card, Row, Accordion } from 'react-bootstrap';
 import TodoTab from '../Components/TodoTab';
 import { Plus } from 'react-bootstrap-icons';
 import ToDoModal from '../Components/ToDoModal';
@@ -129,15 +128,15 @@ class ProjectTab extends Component {
                 <Accordion.Collapse eventKey={this.props.index}>
 
                     <Card.Body style={{ minHeight: '300px', maxHeight: '300px', overflowX: 'scroll' }}>
-                        <Row className="flex-row d-flex align-items-center justify-content-between">
+                        <Row className="flex-row d-flex align-items-start justify-content-between">
                             <Button size="sm" onClick={() => this.setState({ showTaskCreator: true })} className="ml-2  " variant="info">
                                 Add Task <Plus className="ml-2" color="white" size={25} />
                             </Button>
-                            <Form.Group>
+                            <Form.Group style={{fontSize:'1em'}} className="p-2 d-none d-sm-flex flex-column">
                                 <Form.Label>Filter:</Form.Label>
                                 <Form.Control
                                     as="select"
-                                    className="mr-sm-2"
+                                    
                                     custom
                                     value={this.state.filter}
                                     onChange={(e) => { this.setState({ filter: e.target.value }) }} >
@@ -159,7 +158,7 @@ class ProjectTab extends Component {
                                 this.state.toDoList.length > 0 ?
                                     this.renderToDoList() :
                                     <Row className="d-flex mt-3 flex-column col-12 align-items-center justify-content-center">
-                                        <h3>No Tasks Created</h3>
+                                        <h5>No Tasks Created</h5>
                                     </Row>
                             }
                         </Row>

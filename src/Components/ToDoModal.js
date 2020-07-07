@@ -30,7 +30,6 @@ class ToDoModal extends Component {
 
         switch (state) {
             case 'In Progress':
-                // code block
                 return 'success'
                 break;
             case 'To Do':
@@ -40,7 +39,6 @@ class ToDoModal extends Component {
                 return 'primary'
                 break;
             default:
-            // code block
         }
 
     }

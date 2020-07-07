@@ -1,8 +1,7 @@
 import React, { Component } from 'react';
 import { Button, Container, Col, Modal, Row, Spinner, Form, Accordion } from 'react-bootstrap';
-import { Link } from "react-router-dom";
 import ProjectTab from '../Components/ProjectTab';
-import { Plus, PlusCircle } from 'react-bootstrap-icons';
+import { Plus } from 'react-bootstrap-icons';
 class LandingPage extends Component {
 
     constructor(props) {
@@ -12,7 +11,7 @@ class LandingPage extends Component {
             projects: [],
             showProjectEditor: false,
             projectTitle: null,
-            updatingProject: false
+            updatingProject: false,
         };
 
     }
@@ -24,13 +23,16 @@ class LandingPage extends Component {
         this.retrieveUserProject(JSON.parse(localStorage.getItem('toDo_authentication')).userId);
     }
 
-    createNewProject(user, title){
+    createNewProject(user, title) {
+
+        this.setState({ updatingProject: true });
+
         let projectArray = JSON.parse(localStorage.getItem('toDo_projectDirectory'));
 
         let userProjects = projectArray.find(e => e.userID === user).projects;
 
         userProjects.push({
-            "name": title ,
+            "name": title,
             "id": userProjects.length + 1,
             "toDoList": []
         })
@@ -42,15 +44,17 @@ class LandingPage extends Component {
 
     }
 
-    deleteProject(projectID){
+    deleteProject(projectID) {
+        this.setState({ updatingProject: true });
+
         let projectArray = JSON.parse(localStorage.getItem('toDo_projectDirectory'));
 
         let userProjects = projectArray.find(e => e.userID === this.state.user.userId).projects;
 
         projectArray.find(e => e.userID === this.state.user.userId).projects = userProjects.filter(item => item.id !== projectID);
-        
+
         localStorage.setItem('toDo_projectDirectory', JSON.stringify(projectArray));
-        
+
         this.retrieveUserProject(JSON.parse(localStorage.getItem('toDo_authentication')).userId);
     }
 
@@ -74,14 +78,14 @@ class LandingPage extends Component {
 
         return (
             this.state.user !== null ?
-                <Container style={{ minHeight: '100vh' }} className="bg-light p-0 m-0 d-flex text-dark flex-column justify-content-top col-12">
+                <Container fluid style={{ minHeight: '100vh' }} className="bg-light p-0 m-0 d-flex text-dark flex-column justify-content-top col-12">
                     <Row className="sticky-top bg-dark p-2 d-flex p-0 m-0 text-start col-12 text-white justify-content-between align-items-center">
                         <span className="p-1">
                             <h4 className="text-info" style={{ letterSpacing: 3 }}>ToDo</h4>
                             <h6 style={{ letterSpacing: 1 }}>Good Morning, {this.state.user.firstName}</h6>
                         </span>
                         <span className="p-4">
-                            <Button onClick={() => this.props.logOut()} size="sm" className="text-monospace " variant="secondary">
+                            <Button onClick={() => this.props.logOut()} size="sm" className="text-monospace " variant="success">
                                 Sign Out
                         </Button>
                         </span>
@@ -91,14 +95,22 @@ class LandingPage extends Component {
                         <Button onClick={() => { this.setState({ showProjectEditor: true }) }} size="sm" className="ml-2" variant="outline-success">
                             <Plus size={30} />
                         </Button>
+                        
                         <Accordion style={{ maxHeight: '100vh', overflowX: 'scroll' }} className="col-12 mt-4 p-0" defaultActiveKey={0}>
                             {this.state.updatingProject ?
-                                <Row style={{ height: '100vh' }} className="d-flex flex-column col-12 align-items-center justify-content-center">
-                                    <Spinner className="text-center" animation="grow" variant="warning" />
-                                    <p>Loading</p>
+                                <Row style={{ height: '50vh' }} className="d-flex flex-column col-12 align-items-center justify-content-center">
+                                    <Spinner className="text-center p-3" animation="grow" variant="warning" />
                                 </Row>
-                                : this.state.projects.reverse().map((e, i) =>
-                                    <ProjectTab deleteProject={(id) => this.deleteProject(id)} update={() => this.componentDidMount()} data={e} index={i} currentUser={this.state.user} />)}
+                                : this.state.projects.length > 0 ? this.state.projects.reverse().map((e, i) =>
+                                    <ProjectTab
+                                        deleteProject={(id) => this.deleteProject(id)}
+                                        update={() => this.componentDidMount()}
+                                        data={e}
+                                        index={i}
+                                        currentUser={this.state.user} />) :
+                                    <Row className="d-flex mt-3 flex-column col-12 align-items-center justify-content-center">
+                                        <h5>No Projects Created</h5>
+                                    </Row>}
 
                         </Accordion>
                         <Modal size="md" centered show={this.state.showProjectEditor} onHide={() => this.setState({ showTaskEditor: false })}>
@@ -121,9 +133,9 @@ class LandingPage extends Component {
                                 </Form>
                             </Modal.Body>
                             <Modal.Footer>
-                                <Button 
-                                disabled={this.state.projectTitle === null}
-                                variant="outline-primary"
+                                <Button
+                                    disabled={this.state.projectTitle === null}
+                                    variant="outline-primary"
                                     onClick={() => {
                                         this.createNewProject(JSON.parse(localStorage.getItem('toDo_authentication')).userId, this.state.projectTitle);
                                         this.retrieveUserProject(JSON.parse(localStorage.getItem('toDo_authentication')).userId);

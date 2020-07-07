@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
-import { Button, Container, Form, Modal, Row, Col } from 'react-bootstrap';
-import { Link } from "react-router-dom";
+import { Button, Form, Modal, Row, Col } from 'react-bootstrap';
 
 class SignUpModal extends Component {
 

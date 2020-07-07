@@ -41,8 +41,11 @@ class RouterElement extends Component {
 
         this.setState({ loggedIn: JSON.parse(localStorage.getItem('toDo_authentication')).loggedIn })
 
+        console.log('currentUser:');
         console.log(JSON.parse(localStorage.getItem('toDo_authentication')));
+        console.log( 'User List:');
         console.log(JSON.parse(localStorage.getItem('toDo_userList')));
+        console.log('User Projects:');
         console.log(JSON.parse(localStorage.getItem('toDo_projectDirectory')))
     }
 
@@ -52,9 +55,8 @@ class RouterElement extends Component {
 
         userList.push(user);
         localStorage.setItem('toDo_userList', JSON.stringify(userList));
-        console.log(user.userId);
         this.setupProjectDirectory(user.userId)
-        console.log(JSON.parse(localStorage.getItem('toDo_userList')));
+        // console.log(JSON.parse(localStorage.getItem('toDo_userList')));
     }
 
     setupProjectDirectory(userID) {
@@ -73,24 +75,6 @@ class RouterElement extends Component {
 
     }
 
-    createNewProject(user, title){
-        let projectArray = JSON.parse(localStorage.getItem('toDo_projectDirectory'));
-
-        let userProjects = projectArray.find(e => e.userID === user).projects;
-
-        userProjects.push({
-            "name": title ,
-            "id": userProjects.length + 1,
-            "toDoList": []
-        })
-
-        projectArray.find(e => e.userID === user).projects = userProjects;
-        localStorage.setItem('toDo_projectDirectory', JSON.stringify(projectArray));
-        this.landingPage.current.retrieveUserProject();
-        console.log(JSON.parse(localStorage.getItem('toDo_projectDirectory')));
-
-    }
-
     render() {
 
         return (
@@ -98,15 +82,17 @@ class RouterElement extends Component {
                 <Switch>
                     {this.state.loggedIn ?
                         <Route path="/" render={({ history }) => (
-                            <LandingPage ref={this.landingPage} createProject={(user, title) => this.createNewProject(user, title)} logOut={() => this.logOut()} history={history} />
+                            <LandingPage
+                                ref={this.landingPage}
+                                logOut={() => this.logOut()}
+                                history={history} />
                         )} /> :
                         <Route path="/">
-                            <AuthenticationPage login={() => this.setState({ loggedIn: true })} signUp={(data) => this.signUpUser(data)} />
+                            <AuthenticationPage
+                                login={() => this.setState({ loggedIn: true })}
+                                signUp={(data) => this.signUpUser(data)} />
                         </Route>}
-
-
                 </Switch>
-
             </Router>
         );
     }
