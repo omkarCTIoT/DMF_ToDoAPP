@@ -113,7 +113,11 @@ class LandingPage extends Component {
                             <h6 style={{ letterSpacing: 1 }}>Good Morning, {this.state.user.firstName}</h6>
                         </span>
                         <span className="p-4">
-                            <Button onClick={() => this.props.logOut()} size="sm" className="text-monospace " variant="success">
+                            <Button 
+                            onClick={() => this.props.logOut()} 
+                            size="sm" 
+                            className="text-monospace " 
+                            variant="success">
                                 Sign Out
                         </Button>
                         </span>

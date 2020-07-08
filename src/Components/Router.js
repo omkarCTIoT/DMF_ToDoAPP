@@ -65,7 +65,7 @@ class RouterElement extends Component {
             "projects": [{
                 "name": 'Sample Project',
                 "id": 1,
-                "toDoList": [{ "title": 'Sample Task 1', "description": null, "state": 'To Do', "task_id": 1 }]
+                "toDoList": [{ "title": 'Sample Task 1', "description": null, "state": 'To Do', "task_id": 1, "dueDate": null }]
             }]
         }
         let projectArray = JSON.parse(localStorage.getItem('toDo_projectDirectory'));

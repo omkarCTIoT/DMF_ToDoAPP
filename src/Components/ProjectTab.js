@@ -36,7 +36,7 @@ class ProjectTab extends Component {
     }
 
 
-    createNewTask(title, description, state) {
+    createNewTask(title, description, state, dueDate) {
 
         this.setState({ loading: true });
 
@@ -45,7 +45,7 @@ class ProjectTab extends Component {
         let userProjects = projectArray.find(e => e.userID === this.state.user.userId).projects;
 
         let userTodoList = userProjects.find(e => e.id === this.props.data.id).toDoList;
-        userTodoList.push({ "title": title, "description": description, "state": state, "task_id": userTodoList.length + 1 });
+        userTodoList.push({ "title": title, "description": description, "state": state, "task_id": userTodoList.length + 1, "dueDate": dueDate });
 
         userProjects.find(e => e.id === this.props.data.id).toDoList = userTodoList;
         projectArray.find(e => e.userID === this.state.user.userId).projects = userProjects;
@@ -169,7 +169,7 @@ class ProjectTab extends Component {
                     create={true}
                     showTaskCreator={this.state.showTaskCreator}
                     closeTaskCreator={() => this.setState({ showTaskCreator: false })}
-                    createTask={(title, description, state) => this.createNewTask(title, description, state)} />
+                    createTask={(title, description, state, dueDate) => this.createNewTask(title, description, state, dueDate)} />
             </Card >
         )
     }
