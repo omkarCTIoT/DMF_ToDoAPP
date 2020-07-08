@@ -104,7 +104,7 @@ class SignUpModal extends Component {
                     </Form>
                 </Modal.Body>
                 <Modal.Footer>
-                    <Button variant="outline-secondary" disabled={this.state.firstName === null || this.state.lastName === null || this.state.username === null} onClick={() => { this.checkUser() }}>Done </Button>
+                    <Button variant="outline-secondary" disabled={this.state.firstName === null || this.state.lastName === null || this.state.username === null || this.state.password === null} onClick={() => { this.checkUser() }}>Done </Button>
                     <Button variant="outline-primary" onClick={() => { this.cancelSignUp(); this.props.closeModal() }}>Cancel</Button>
                 </Modal.Footer>
             </Modal>
