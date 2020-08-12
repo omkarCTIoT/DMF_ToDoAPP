@@ -15,4 +15,5 @@ jobs:
           paths:
             - node_modules
           key: 'v1-dependencies-{{ checksum "package.json" }}'
-      - run: 'unset CI'
+      - run: 'yarn build'
+      - run: './node_modules/.bin/firebase deploy --token=$FIREBASE_TOKEN'
