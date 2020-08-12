@@ -1,7 +1,10 @@
 version: 2
 jobs:
   build:
-    docker:
+     branches:
+        only:
+          - master
+   docker:
       - image: 'circleci/node:8'
     working_directory: ~/repo
     steps:
