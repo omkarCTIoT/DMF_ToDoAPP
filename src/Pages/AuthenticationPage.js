@@ -26,11 +26,11 @@ class LandingPage extends Component {
                 localStorage.setItem('toDo_authentication', JSON.stringify(loginData));
                 this.props.login();
                 this.setState({ error: null });
-            } else{
-                this.setState({error: 'Password is incorrect.' })
+            } else {
+                this.setState({ error: 'Password is incorrect.' })
             }
 
-            
+
         } else {
             this.setState({ error: 'Username is not registered.' })
         }
@@ -42,11 +42,7 @@ class LandingPage extends Component {
 
         return (
             <Container style={{ minHeight: '30vh' }} className="bg-light p-5 d-flex text-dark flex-column justify-content-around col-lg-4 col-md-8">
-<<<<<<< HEAD
                 <h2 className="text-info" style={{ letterSpacing: 2 }}>Sign In CI/CD Test</h2>
-=======
-                <h2 className="text-info" style={{ letterSpacing: 3 }}>SIGN IN</h2>
->>>>>>> 165a0f33e3e257b7d9a379b128dfa1368a3092fd
                 <Form className="mt-3 text-dark">
                     <Form.Group>
                         <Form.Label><h5>Username</h5></Form.Label>
@@ -57,7 +53,7 @@ class LandingPage extends Component {
                         <Form.Control value={this.state.password} onChange={(e) => this.setState({ password: e.target.value })} type="password" placeholder="Password" />
                     </Form.Group>
                     {this.state.error !== null ? <h6 className="text-danger">{this.state.error}</h6> : null}
-                    <Button disabled={this.state.username === null || this.state.password=== null} onClick={() => this.signIn()} variant="primary">
+                    <Button disabled={this.state.username === null || this.state.password === null} onClick={() => this.signIn()} variant="primary">
                         <BoxArrowInRight size={30} />
                     </Button>
                 </Form>
@@ -70,7 +66,7 @@ class LandingPage extends Component {
                             Sign Up
                     </Button>
                     </Form.Group>
-                    
+
                 </Form>
                 <SignUpModal
                     showModal={this.state.showSignUpModal}
