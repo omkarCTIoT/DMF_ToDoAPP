@@ -42,7 +42,11 @@ class LandingPage extends Component {
 
         return (
             <Container style={{ minHeight: '30vh' }} className="bg-light p-5 d-flex text-dark flex-column justify-content-around col-lg-4 col-md-8">
+<<<<<<< HEAD
                 <h2 className="text-info" style={{ letterSpacing: 2 }}>Sign In CI/CD Test</h2>
+=======
+                <h2 className="text-info" style={{ letterSpacing: 3 }}>SIGN IN</h2>
+>>>>>>> 165a0f33e3e257b7d9a379b128dfa1368a3092fd
                 <Form className="mt-3 text-dark">
                     <Form.Group>
                         <Form.Label><h5>Username</h5></Form.Label>
