@@ -1,12 +1,12 @@
 version: 2
-      jobs:
-      build:
-        filters:
-          branches:
-            only:
-              - master
+jobs:
+  build:
+    filters:
+            branches:
+              only:
+                - master
     docker:
-      - image: "circleci/node:8"
+      - image: 'circleci/node:8'
     working_directory: ~/repo
     steps:
       - checkout
@@ -14,10 +14,10 @@ version: 2
           keys:
             - 'v1-dependencies-{{ checksum "package.json" }}'
             - v1-dependencies-
-      - run: "yarn install"
+      - run: 'yarn install'
       - save_cache:
           paths:
             - node_modules
           key: 'v1-dependencies-{{ checksum "package.json" }}'
-      - run: "yarn build"
-      - run: "./node_modules/.bin/firebase deploy --token=$FIREBASE_TOKEN"
+      - run: 'yarn build'
+      - run: './node_modules/.bin/firebase deploy --token=$FIREBASE_TOKEN'
