@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
 import LandingPage from '../Pages/LandingPage';
 import AuthenticationPage from '../Pages/AuthenticationPage';
-
+import Converter from '../Pages/WordToHtmlConverter';
 
 class RouterElement extends Component {
 
@@ -88,9 +88,10 @@ class RouterElement extends Component {
                                 history={history} />
                         )} /> :
                         <Route path="/">
-                            <AuthenticationPage
+                            <Converter/>
+                            {/* <AuthenticationPage
                                 login={() => this.setState({ loggedIn: true })}
-                                signUp={(data) => this.signUpUser(data)} />
+                                signUp={(data) => this.signUpUser(data)} /> */}
                         </Route>}
                 </Switch>
             </Router>
